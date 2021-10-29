@@ -2,53 +2,41 @@
 #include <stdlib.h>
 
 /**
- *string_nconcat - fonction concatenate strings
- *@s1: string
- *@s2: string
- *@n: integer
+ *string_nconcat - concatenates two strings
+ *@s1: pointer to the first string
+ *@s2: pointer to the second string
+ *@n: number of bytes used fron second string
  *
- *Return: pointer
+ *Return: NULL if malloc fails allocating memory
+ *        ptr pointer to the concatenated string
  */
-
 char *string_nconcat(char *s1, char *s2, unsigned int n)
 {
-unsigned int i, j, a = 0;
-char *c;
+	char *ptr;
+	unsigned int len1 = 0, len2 = 0, i = 0;
 
-if (s1 == 0)
-s1 = "";
-if (s2 == 0)
-s2 = "";
+	if (s1 == NULL)
+		s1 = "";
+	if (s2 == NULL)
+		s2 = "";
+	while (s1[len1] || s2[len2])
+	{
+		if (s1[len1])
+			len1++;
+		if (s2[len2])
+			len2++;
+	}
+	len1++;
+	if (n >= len2)
+		n = len2;
+	ptr = malloc((len1 + n) * sizeof(char));
+	if (ptr == NULL)
+		return (NULL);
+	for (i = 0; s1[i]; i++)
+		ptr[i] = s1[i];
+	for (; i - len1 + 1 < n && s2[i - len1 + 1]; i++)
+		ptr[i] = s2[i - len1 + 1];
+	ptr[i] = '\0';
 
-for (i = 0; s1[i]; i++)
-;
-for (j = 0; s2[j]; j++)
-;
-
-if (j > n)
-j = n;
-
-c = malloc ((sizeof(char) * i) + (sizeof(char) * j) +1);
-
-if (c == NULL)
-{
-return (NULL);
-}
-
-while (*s1 != '\0')
-{
-c[a] = *s1;
-s1++;
-a++;
-}
-
-while (a < j + i)
-{
-c[a] = *s2;
-s2++;
-a++;
-}
-c[i + j] = '\0';
-
-return (c);
+	return (ptr);
 }
